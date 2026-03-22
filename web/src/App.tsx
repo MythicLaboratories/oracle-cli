@@ -278,7 +278,7 @@ function App() {
 
       if (reason === "config_update") {
         console.log("[App] Config update detected, refreshing global config");
-        window.dispatchEvent(new Event("kimi:config-update"));
+        window.dispatchEvent(new Event("oracle:config-update"));
       }
 
       if (!reason.startsWith("prompt_")) {
@@ -417,18 +417,16 @@ function App() {
                   )}
                 >
                   <a
-                    href="https://www.kimi.com/code"
+                    href="https://mythicoracle.ai"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:opacity-80 transition-opacity"
                   >
-                    <img
-                      src="/logo.png"
-                      alt="Kimi"
-                      width={24}
-                      height={24}
-                      className="size-6"
-                    />
+                    <svg width={24} height={24} viewBox="0 0 100 100" className="size-6">
+                      <polygon points="50,8 20,44 50,56" fill="#39FF14" opacity="0.9"/>
+                      <polygon points="50,8 80,44 50,56" fill="#66FF44" opacity="0.75"/>
+                      <polygon points="20,44 50,56 80,44 50,92" fill="#1A8A0A" opacity="0.85"/>
+                    </svg>
                   </a>
                   <button
                     type="button"

@@ -49,7 +49,7 @@ def model_display_name(model_name: str | None) -> str:
     if not model_name:
         return ""
     if model_name in ("kimi-for-coding", "kimi-code"):
-        return f"{model_name} (powered by kimi-k2.5)"
+        return f"{model_name} (powered by Oracle / kimi-k2.5)"
     return model_name
 
 
@@ -63,15 +63,15 @@ def augment_provider_with_env_vars(provider: LLMProvider, model: LLMModel) -> di
 
     match provider.type:
         case "kimi":
-            if base_url := os.getenv("KIMI_BASE_URL"):
+            if base_url := os.getenv("ORACLE_BASE_URL") or os.getenv("KIMI_BASE_URL"):
                 provider.base_url = base_url
-                applied["KIMI_BASE_URL"] = base_url
-            if api_key := os.getenv("KIMI_API_KEY"):
+                applied["ORACLE_BASE_URL"] = base_url
+            if api_key := os.getenv("ORACLE_API_KEY") or os.getenv("KIMI_API_KEY"):
                 provider.api_key = SecretStr(api_key)
-                applied["KIMI_API_KEY"] = "******"
-            if model_name := os.getenv("KIMI_MODEL_NAME"):
+                applied["ORACLE_API_KEY"] = "******"
+            if model_name := os.getenv("ORACLE_MODEL_NAME") or os.getenv("KIMI_MODEL_NAME"):
                 model.model = model_name
-                applied["KIMI_MODEL_NAME"] = model_name
+                applied["ORACLE_MODEL_NAME"] = model_name
             if max_context_size := os.getenv("KIMI_MODEL_MAX_CONTEXT_SIZE"):
                 model.max_context_size = int(max_context_size)
                 applied["KIMI_MODEL_MAX_CONTEXT_SIZE"] = max_context_size

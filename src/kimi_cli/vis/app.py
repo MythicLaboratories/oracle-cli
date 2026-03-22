@@ -76,7 +76,7 @@ def find_available_port(host: str, start_port: int, max_attempts: int = MAX_PORT
 
 
 def _print_banner(lines: list[str]) -> None:
-    """Print a boxed banner, reusing the same tag conventions as kimi web."""
+    """Print a boxed banner, reusing the same tag conventions as oracle web."""
     import textwrap
 
     processed: list[str] = []
@@ -130,12 +130,12 @@ def run_vis_server(
     url = f"http://{host}:{actual_port}"
 
     banner_lines = [
-        "<center>██╗  ██╗██╗███╗   ███╗██╗    ██╗   ██╗██╗███████╗",
-        "<center>██║ ██╔╝██║████╗ ████║██║    ██║   ██║██║██╔════╝",
-        "<center>█████╔╝ ██║██╔████╔██║██║    ██║   ██║██║███████╗",
-        "<center>██╔═██╗ ██║██║╚██╔╝██║██║    ╚██╗ ██╔╝██║╚════██║",
-        "<center>██║  ██╗██║██║ ╚═╝ ██║██║     ╚████╔╝ ██║███████║",
-        "<center>╚═╝  ╚═╝╚═╝╚═╝     ╚═╝╚═╝      ╚═══╝  ╚═╝╚══════╝",
+        "<center> ██████╗ ██████╗  █████╗  ██████╗██╗     ███████╗    ██╗   ██╗██╗███████╗",
+        "<center>██╔═══██╗██╔══██╗██╔══██╗██╔════╝██║     ██╔════╝    ██║   ██║██║██╔════╝",
+        "<center>██║   ██║██████╔╝███████║██║     ██║     █████╗      ██║   ██║██║███████╗",
+        "<center>██║   ██║██╔══██╗██╔══██║██║     ██║     ██╔══╝      ╚██╗ ██╔╝██║╚════██║",
+        "<center>╚██████╔╝██║  ██║██║  ██║╚██████╗███████╗███████╗     ╚████╔╝ ██║███████║",
+        "<center> ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝╚══════╝      ╚═══╝  ╚═╝╚══════╝",
         "",
         "<center>AGENT TRACING VISUALIZER (Technical Preview)",
         "",
@@ -146,7 +146,7 @@ def run_vis_server(
         "<hr>",
         "",
         "<nowrap>  This feature is in Technical Preview and may be unstable.",
-        "<nowrap>  Please report issues to the kimi-cli team.",
+        "<nowrap>  Please report issues to the Oracle CLI team.",
         "",
     ]
 

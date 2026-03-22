@@ -30,7 +30,7 @@ import {
   PanelLeftClose,
 } from "lucide-react";
 import { Virtuoso } from "react-virtuoso";
-import { KimiCliBrand } from "@/components/kimi-cli-brand";
+import { OracleCliBrand } from "@/components/oracle-cli-brand";
 import {
   Dialog,
   DialogContent,
@@ -613,7 +613,7 @@ export const SessionsSidebar = memo(function SessionsSidebarComponent({
       <aside className="flex h-full min-h-0 flex-col">
         <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
           <div className="flex items-center justify-between px-3 pt-2">
-            <KimiCliBrand size="sm" showVersion={true} />
+            <OracleCliBrand size="sm" showVersion={true} />
             {onClose && (
               <button
                 type="button"

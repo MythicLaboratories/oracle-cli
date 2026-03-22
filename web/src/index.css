@@ -1,5 +1,5 @@
 /* ==========================================================================
- * Kimi Code CLI Web UI - Design System
+ * Oracle CLI Web UI - Design System
  *
  *
  * Structure:
@@ -85,39 +85,39 @@
   --safe-left: env(safe-area-inset-left, 0px);
 }
 
-/* Dark mode tokens */
+/* Dark mode tokens — Mythic palette */
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.18 0.005 285.823);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.18 0.005 285.823);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.75 0.02 285.885);
-  --primary-foreground: oklch(0.141 0.005 285.823);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.13 0.008 285);
+  --foreground: oklch(0.92 0.005 285);
+  --card: oklch(0.17 0.008 285);
+  --card-foreground: oklch(0.92 0.005 285);
+  --popover: oklch(0.17 0.008 285);
+  --popover-foreground: oklch(0.92 0.005 285);
+  --primary: oklch(0.85 0.28 145);
+  --primary-foreground: oklch(0.13 0.008 285);
+  --secondary: oklch(0.25 0.008 285);
+  --secondary-foreground: oklch(0.92 0.005 285);
+  --muted: oklch(0.25 0.008 285);
+  --muted-foreground: oklch(0.65 0.015 285);
+  --accent: oklch(0.25 0.008 285);
+  --accent-foreground: oklch(0.92 0.005 285);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.274 0.006 286.033);
-  --input: oklch(0.274 0.006 286.033);
-  --ring: oklch(0.552 0.016 285.938);
+  --border: oklch(0.25 0.008 285);
+  --input: oklch(0.25 0.008 285);
+  --ring: oklch(0.85 0.28 145);
 
   /* Semantic colors - dark */
-  --success: oklch(0.7 0.2 145);
+  --success: oklch(0.85 0.28 145);
   --warning: oklch(0.75 0.15 75);
   --info: oklch(0.7 0.15 250);
-  --destructive-foreground: oklch(0.141 0.005 285.823);
+  --destructive-foreground: oklch(0.13 0.008 285);
 
   /* Chart colors - dark */
-  --chart-1: oklch(0.7 0.15 250);
-  --chart-2: oklch(0.7 0.2 145);
+  --chart-1: oklch(0.85 0.28 145);
+  --chart-2: oklch(0.6 0.22 300);
   --chart-3: oklch(0.75 0.15 75);
   --chart-4: oklch(0.704 0.191 22.216);
-  --chart-5: oklch(0.7 0.2 300);
+  --chart-5: oklch(0.7 0.15 250);
 
   /* Shadows - dark */
   --shadow-pane: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -125,19 +125,19 @@
   --shadow-input: 0 2px 6px rgba(0, 0, 0, 0.3);
   --shadow-toolbar: 0 2px 6px rgba(0, 0, 0, 0.3);
 
-  /* Sidebar tokens - dark */
-  --sidebar: oklch(0.18 0.005 285.823);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.274 0.006 286.033);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.7 0.15 250);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.274 0.006 286.033);
-  --sidebar-ring: oklch(0.7 0.15 250);
+  /* Sidebar tokens - dark (electric violet accent) */
+  --sidebar: oklch(0.17 0.008 285);
+  --sidebar-foreground: oklch(0.92 0.005 285);
+  --sidebar-primary: oklch(0.25 0.008 285);
+  --sidebar-primary-foreground: oklch(0.92 0.005 285);
+  --sidebar-accent: oklch(0.6 0.22 300);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(0.25 0.008 285);
+  --sidebar-ring: oklch(0.6 0.22 300);
 
   /* Inline code - dark */
-  --code-background: oklch(0.274 0.006 286.033);
-  --code-foreground: oklch(0.985 0 0);
+  --code-background: oklch(0.25 0.008 285);
+  --code-foreground: oklch(0.92 0.005 285);
 }
 
 * {

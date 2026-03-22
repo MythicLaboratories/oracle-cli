@@ -50,15 +50,17 @@ class Platform(NamedTuple):
 
 
 def _kimi_code_base_url() -> str:
+    if base_url := os.getenv("ORACLE_BASE_URL"):
+        return base_url
     if base_url := os.getenv("KIMI_CODE_BASE_URL"):
         return base_url
-    return "https://api.kimi.com/coding/v1"
+    return "https://api.moonshot.ai/v1"
 
 
 PLATFORMS: list[Platform] = [
     Platform(
         id=KIMI_CODE_PLATFORM_ID,
-        name="Kimi Code",
+        name="Oracle CLI",
         base_url=_kimi_code_base_url(),
         search_url=f"{_kimi_code_base_url()}/search",
         fetch_url=f"{_kimi_code_base_url()}/fetch",

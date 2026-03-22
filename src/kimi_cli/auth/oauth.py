@@ -45,10 +45,10 @@ if TYPE_CHECKING:
     from kimi_cli.soul.agent import Runtime
 
 
-KIMI_CODE_CLIENT_ID = "17e5f671-d194-4dfb-9706-5516cb48c098"
-KIMI_CODE_OAUTH_KEY = "oauth/kimi-code"
-DEFAULT_OAUTH_HOST = "https://auth.kimi.com"
-KEYRING_SERVICE = "kimi-code"
+KIMI_CODE_CLIENT_ID = "oracle-cli-00000000-0000-0000-0000-000000000001"
+KIMI_CODE_OAUTH_KEY = "oauth/oracle-cli"
+DEFAULT_OAUTH_HOST = "https://auth.mythicoracle.ai"
+KEYRING_SERVICE = "oracle-cli"
 REFRESH_INTERVAL_SECONDS = 60
 REFRESH_THRESHOLD_SECONDS = 300
 
@@ -136,7 +136,7 @@ class DeviceAuthorization:
 
 
 def _oauth_host() -> str:
-    return os.getenv("KIMI_CODE_OAUTH_HOST") or os.getenv("KIMI_OAUTH_HOST") or DEFAULT_OAUTH_HOST
+    return os.getenv("ORACLE_OAUTH_HOST") or os.getenv("KIMI_CODE_OAUTH_HOST") or os.getenv("KIMI_OAUTH_HOST") or DEFAULT_OAUTH_HOST
 
 
 def _device_id_path() -> Path:
@@ -223,6 +223,9 @@ def _credentials_dir() -> Path:
 
 def _credentials_path(key: str) -> Path:
     name = key.removeprefix("oauth/").split("/")[-1] or key
+    # Map legacy kimi-code credential path to oracle-cli
+    if name == "kimi-code":
+        name = "oracle-cli"
     return _credentials_dir() / f"{name}.json"
 
 
