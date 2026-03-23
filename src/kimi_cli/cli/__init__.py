@@ -27,11 +27,11 @@ class SwitchToWeb(Exception):
 cli = typer.Typer(
     cls=LazySubcommandGroup,
     epilog="""\b\
-Documentation:        https://moonshotai.github.io/kimi-cli/\n
-LLM friendly version: https://moonshotai.github.io/kimi-cli/llms.txt""",
+Documentation:        https://mythicoracle.ai/docs\n
+GitHub:               https://github.com/MythicLaboratories/oracle-cli""",
     add_completion=False,
     context_settings={"help_option_names": ["-h", "--help"]},
-    help="Kimi, your next CLI agent.",
+    help="Oracle — AI agent for the terminal, powered by Mythic Oracle.",
 )
 
 UIMode = Literal["shell", "print", "acp", "wire"]
@@ -43,7 +43,7 @@ def _version_callback(value: bool) -> None:
     if value:
         from kimi_cli.constant import get_version
 
-        typer.echo(f"kimi, version {get_version()}")
+        typer.echo(f"oracle-cli, version {get_version()}")
         raise typer.Exit()
 
 

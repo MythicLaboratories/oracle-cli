@@ -205,7 +205,7 @@ def _common_headers() -> dict[str, str]:
     device_name = platform.node() or socket.gethostname()
     device_model = _device_model()
     headers = {
-        "X-Msh-Platform": "kimi_cli",
+        "X-Msh-Platform": "oracle_cli",
         "X-Msh-Version": VERSION,
         "X-Msh-Device-Name": device_name,
         "X-Msh-Device-Model": device_model,
@@ -317,8 +317,8 @@ async def request_device_authorization() -> DeviceAuthorization:
     async with (
         new_client_session() as session,
         session.post(
-            f"{_oauth_host().rstrip('/')}/api/oauth/device_authorization",
-            data={"client_id": KIMI_CODE_CLIENT_ID},
+            f"{_oauth_host().rstrip('/')}/api/auth/device-code",
+            json={"client_id": KIMI_CODE_CLIENT_ID},
             headers=_common_headers(),
         ) as response,
     ):
@@ -341,8 +341,8 @@ async def _request_device_token(auth: DeviceAuthorization) -> tuple[int, dict[st
         async with (
             new_client_session() as session,
             session.post(
-                f"{_oauth_host().rstrip('/')}/api/oauth/token",
-                data={
+                f"{_oauth_host().rstrip('/')}/api/auth/device-token",
+                json={
                     "client_id": KIMI_CODE_CLIENT_ID,
                     "device_code": auth.device_code,
                     "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
@@ -366,8 +366,8 @@ async def refresh_token(refresh_token: str) -> OAuthToken:
     async with (
         new_client_session() as session,
         session.post(
-            f"{_oauth_host().rstrip('/')}/api/oauth/token",
-            data={
+            f"{_oauth_host().rstrip('/')}/api/auth/device-token",
+            json={
                 "client_id": KIMI_CODE_CLIENT_ID,
                 "grant_type": "refresh_token",
                 "refresh_token": refresh_token,
@@ -403,7 +403,7 @@ def _apply_kimi_code_config(
 ) -> None:
     platform = get_platform_by_id(KIMI_CODE_PLATFORM_ID)
     if platform is None:
-        raise OAuthError("Kimi Code platform not found.")
+        raise OAuthError("Oracle CLI platform not found.")
 
     provider_key = managed_provider_key(platform.id)
     config.providers[provider_key] = LLMProvider(
