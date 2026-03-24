@@ -216,7 +216,11 @@ def create_app(
     if allowed_origins:
         cors_kwargs["allow_origins"] = allowed_origins
     else:
-        cors_kwargs["allow_origin_regex"] = DEFAULT_ALLOWED_ORIGIN_REGEX.pattern
+        # Allow localhost + mythicoracle.ai for integrations
+        cors_kwargs["allow_origin_regex"] = (
+            r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
+            r"|^https?://(www\.)?mythicoracle\.ai$"
+        )
 
     # CORS middleware for local development
     application.add_middleware(cast(Any, CORSMiddleware), **cors_kwargs)
