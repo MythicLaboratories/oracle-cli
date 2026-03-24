@@ -34,6 +34,8 @@ class ClaudeCodeIntegration(Integration):
     _read_task: asyncio.Task[None] | None = field(default=None, repr=False)
     _claude_path: str | None = field(default=None, repr=False)
     _work_dir: str | None = field(default=None, repr=False)
+    _session_id: str | None = field(default=None, repr=False)
+    _continue_session: bool = field(default=False, repr=False)
 
     def detect(self) -> dict[str, Any]:
         """Check if Claude Code is installed and return info."""
@@ -59,7 +61,33 @@ class ClaudeCodeIntegration(Integration):
         except Exception:
             return None
 
-    async def connect(self, work_dir: str | None = None) -> None:
+    async def list_sessions(self) -> list[dict[str, Any]]:
+        """List recent Claude Code sessions."""
+        path = self._claude_path or shutil.which("claude")
+        if not path:
+            return []
+        try:
+            # Get recent sessions by checking ~/.claude/projects/
+            import os
+            claude_dir = os.path.expanduser("~/.claude/projects")
+            sessions: list[dict[str, Any]] = []
+            if os.path.isdir(claude_dir):
+                for project in sorted(os.listdir(claude_dir), reverse=True):
+                    project_path = os.path.join(claude_dir, project)
+                    if not os.path.isdir(project_path):
+                        continue
+                    # Decode the project name (dashes = slashes)
+                    display_path = "/" + project.replace("-", "/").lstrip("/")
+                    sessions.append({
+                        "id": project,
+                        "path": display_path,
+                        "name": os.path.basename(display_path) or project,
+                    })
+            return sessions[:20]  # Last 20
+        except Exception:
+            return []
+
+    async def connect(self, work_dir: str | None = None, session_id: str | None = None, continue_last: bool = False) -> None:
         """Start a Claude Code subprocess in stream-json mode."""
         if self.status == IntegrationStatus.CONNECTED and self._process:
             return
@@ -67,6 +95,8 @@ class ClaudeCodeIntegration(Integration):
         self.status = IntegrationStatus.CONNECTING
         self._broadcast({"type": "status", "status": "connecting"})
         self._work_dir = work_dir
+        self._session_id = session_id
+        self._continue_session = continue_last
 
         path = self._claude_path or shutil.which("claude")
         if not path:
@@ -165,9 +195,14 @@ class ClaudeCodeIntegration(Integration):
             raise RuntimeError("Claude Code CLI not found")
 
         try:
+            cmd = [path, "-p", full_prompt, "--output-format", "json"]
+            if self._session_id:
+                cmd.extend(["--resume", self._session_id])
+            elif self._continue_session:
+                cmd.append("--continue")
+
             proc = await asyncio.create_subprocess_exec(
-                path, "-p", full_prompt,
-                "--output-format", "json",
+                *cmd,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
                 cwd=self._work_dir,

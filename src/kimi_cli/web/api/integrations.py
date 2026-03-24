@@ -20,6 +20,8 @@ router = APIRouter(prefix="/api/integrations", tags=["integrations"])
 
 class ConnectRequest(BaseModel):
     work_dir: str | None = None
+    session_id: str | None = None
+    continue_last: bool = False
 
 
 class SendRequest(BaseModel):
@@ -86,11 +88,73 @@ async def connect_integration(integration_id: str, req: ConnectRequest) -> dict[
         raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
 
     if isinstance(integration, ClaudeCodeIntegration):
-        await integration.connect(work_dir=req.work_dir)
+        await integration.connect(
+            work_dir=req.work_dir,
+            session_id=req.session_id,
+            continue_last=req.continue_last,
+        )
     else:
         await integration.connect()
 
     return {"status": integration.status.value, "error": integration.error}
+
+
+@router.get("/{integration_id}/sessions")
+async def list_sessions(integration_id: str) -> list[dict[str, Any]]:
+    """List available sessions for an integration."""
+    registry = get_registry()
+    integration = registry.get(integration_id)
+    if not integration:
+        raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
+    if isinstance(integration, ClaudeCodeIntegration):
+        return await integration.list_sessions()
+    return []
+
+
+@router.post("/{integration_id}/open-terminal")
+async def open_terminal(integration_id: str, req: ConnectRequest) -> dict[str, str]:
+    """Open the integration in a native terminal window."""
+    registry = get_registry()
+    integration = registry.get(integration_id)
+    if not integration:
+        raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
+
+    if isinstance(integration, ClaudeCodeIntegration):
+        import subprocess
+        import sys
+
+        claude_path = integration._claude_path or "claude"
+        cmd_parts = [claude_path]
+        if req.session_id:
+            cmd_parts.extend(["--resume", req.session_id])
+        elif req.continue_last:
+            cmd_parts.append("--continue")
+
+        cmd_str = " ".join(cmd_parts)
+        work_dir = req.work_dir or "~"
+
+        if sys.platform == "darwin":
+            # Open native Terminal.app with Claude Code
+            apple_script = f'''
+            tell application "Terminal"
+                activate
+                do script "cd {work_dir} && {cmd_str}"
+            end tell
+            '''
+            subprocess.Popen(["osascript", "-e", apple_script])
+        else:
+            # Linux: try common terminals
+            for term in ["gnome-terminal", "xterm", "konsole"]:
+                import shutil as _shutil
+                if _shutil.which(term):
+                    subprocess.Popen([term, "--", "bash", "-c", f"cd {work_dir} && {cmd_str}"])
+                    break
+
+        # Mark as connected
+        await integration.connect(work_dir=req.work_dir, session_id=req.session_id, continue_last=req.continue_last)
+        return {"status": "opened", "command": cmd_str}
+
+    raise HTTPException(status_code=400, detail="Terminal not supported for this integration")
 
 
 @router.post("/{integration_id}/disconnect")
