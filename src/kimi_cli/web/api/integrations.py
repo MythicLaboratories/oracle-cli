@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+import json
+import shutil
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, status
@@ -22,11 +24,13 @@ class ConnectRequest(BaseModel):
     work_dir: str | None = None
     session_id: str | None = None
     continue_last: bool = False
+    model: str = "opus"
 
 
 class SendRequest(BaseModel):
     prompt: str
     share_context: bool = True
+    model: str | None = None
 
 
 class IntegrationInfo(BaseModel):
@@ -92,6 +96,7 @@ async def connect_integration(integration_id: str, req: ConnectRequest) -> dict[
             work_dir=req.work_dir,
             session_id=req.session_id,
             continue_last=req.continue_last,
+            model=req.model,
         )
     else:
         await integration.connect()
@@ -192,6 +197,71 @@ async def send_to_integration(integration_id: str, req: SendRequest) -> dict[str
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e),
         )
+
+
+@router.post("/{integration_id}/send-stream")
+async def send_stream(integration_id: str, req: SendRequest) -> Any:
+    """Stream Claude Code's live output (thinking, tool calls, text) via SSE."""
+    from starlette.responses import StreamingResponse
+
+    registry = get_registry()
+    integration = registry.get(integration_id)
+    if not integration:
+        raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
+    if not isinstance(integration, ClaudeCodeIntegration):
+        raise HTTPException(status_code=400, detail="Streaming only supported for Claude Code")
+
+    claude_path = integration._claude_path or shutil.which("claude")
+    if not claude_path:
+        raise HTTPException(status_code=500, detail="Claude Code CLI not found")
+
+    prompt = req.prompt
+    if req.share_context:
+        shared = []
+        for other in registry.values():
+            if other.id != integration_id:
+                shared.extend(other.context[-10:])
+        if shared:
+            ctx = "\n".join(f"[{m.source}]: {m.content}" for m in shared)
+            prompt = f"<context>\n{ctx}\n</context>\n\n{prompt}"
+
+    model = integration._model or "opus"
+    cmd = [
+        claude_path, "-p", prompt,
+        "--output-format", "stream-json",
+        "--verbose",
+        "--continue",
+        "--dangerously-skip-permissions",
+        "--model", model,
+    ]
+
+    async def event_generator():
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            cwd=integration._work_dir,
+        )
+        assert proc.stdout
+        while True:
+            line = await proc.stdout.readline()
+            if not line:
+                break
+            decoded = line.decode().strip()
+            if not decoded:
+                continue
+            yield f"data: {decoded}\n\n"
+        yield "data: {\"type\":\"done\"}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+        },
+    )
 
 
 @router.get("/{integration_id}/context")

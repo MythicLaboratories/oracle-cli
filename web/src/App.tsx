@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ChatStatus } from "ai";
 import { PromptInputProvider } from "@ai-elements";
 import { toast } from "sonner";
-import { PanelLeftOpen, PanelLeftClose, Puzzle } from "lucide-react";
-import { IntegrationsDialog } from "./features/integrations";
+import { PanelLeftOpen, PanelLeftClose, Monitor } from "lucide-react";
+import { ComputerWorkspace } from "./features/computer";
 import { cn } from "./lib/utils";
 import { ResizablePanel, ResizablePanelGroup } from "./components/ui/resizable";
 import { ChatWorkspaceContainer } from "./features/chat/chat-workspace-container";
@@ -112,7 +112,7 @@ function App() {
 
   // Create session dialog state (lifted to App for unified access)
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [showIntegrations, setShowIntegrations] = useState(false);
+  const [showComputer, setShowComputer] = useState(false);
 
   // Auto-open create dialog or create session directly from URL params
   useEffect(() => {
@@ -480,12 +480,12 @@ function App() {
                       <ThemeToggle />
                       <button
                         type="button"
-                        aria-label="Integrations"
-                        title="Integrations"
+                        aria-label="Computer"
+                        title="Computer"
                         className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary/50 hover:text-foreground"
-                        onClick={() => setShowIntegrations(true)}
+                        onClick={() => setShowComputer(true)}
                       >
-                        <Puzzle className="size-4" />
+                        <Monitor className="size-4" />
                       </button>
                     </div>
                     <button
@@ -513,11 +513,10 @@ function App() {
         </div>
       </div>
 
-      {/* Integrations Dialog */}
-      <IntegrationsDialog
-        open={showIntegrations}
-        onOpenChange={setShowIntegrations}
-      />
+      {/* Computer Workspace — full-screen terminal + chat */}
+      {showComputer && (
+        <ComputerWorkspace onClose={() => setShowComputer(false)} />
+      )}
 
       {/* Toast notifications */}
       <Toaster position="top-right" richColors />

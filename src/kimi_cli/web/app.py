@@ -25,6 +25,7 @@ from kimi_cli.web.api import (
     integrations_router,
     open_in_router,
     sessions_router,
+    terminal_router,
     work_dirs_router,
 )
 from kimi_cli.web.auth import (
@@ -229,6 +230,7 @@ def create_app(
     application.include_router(integrations_router)
     application.include_router(sessions_router)
     application.include_router(work_dirs_router)
+    application.include_router(terminal_router)
     if not restrict_sensitive_apis:
         application.include_router(open_in_router)
 
