@@ -1,4 +1,4 @@
-"""Kimi Code CLI Web UI application."""
+"""Oracle CLI Web UI application."""
 
 import importlib
 import os
@@ -22,6 +22,7 @@ from starlette.responses import HTMLResponse
 from kimi_cli import logger
 from kimi_cli.web.api import (
     config_router,
+    integrations_router,
     open_in_router,
     sessions_router,
     work_dirs_router,
@@ -187,7 +188,7 @@ def create_app(
             await runner.stop()
 
     application = FastAPI(
-        title="Kimi Code CLI Web Interface",
+        title="Oracle CLI Web Interface",
         docs_url=None,
         lifespan=lifespan,
         separate_input_output_schemas=False,
@@ -221,6 +222,7 @@ def create_app(
     application.add_middleware(cast(Any, CORSMiddleware), **cors_kwargs)
 
     application.include_router(config_router)
+    application.include_router(integrations_router)
     application.include_router(sessions_router)
     application.include_router(work_dirs_router)
     if not restrict_sensitive_apis:

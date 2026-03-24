@@ -134,7 +134,7 @@ def kimi(
             file_okay=True,
             dir_okay=False,
             readable=True,
-            help="Config TOML/JSON file to load. Default: ~/.kimi/config.toml.",
+            help="Config TOML/JSON file to load. Default: ~/.oracle/config.toml.",
         ),
     ] = None,
     model_name: Annotated[
@@ -311,13 +311,13 @@ def kimi(
         ),
     ] = None,
 ):
-    """Kimi, your next CLI agent."""
+    """Oracle, your AI agent for the terminal."""
     import asyncio
     import json
 
     from kimi_cli.utils.proctitle import init_process_name
 
-    init_process_name("Kimi Code")
+    init_process_name("Oracle CLI")
 
     if ctx.invoked_subcommand is not None:
         return  # skip rest if a subcommand is invoked
@@ -687,7 +687,7 @@ def login(
         help="Emit OAuth events as JSON lines.",
     ),
 ) -> None:
-    """Login to your Kimi account."""
+    """Login to your Oracle account."""
     import asyncio
 
     from rich.console import Console
@@ -746,7 +746,7 @@ def logout(
         help="Emit OAuth events as JSON lines.",
     ),
 ) -> None:
-    """Logout from your Kimi account."""
+    """Logout from your Oracle account."""
     import asyncio
 
     from rich.console import Console
@@ -786,7 +786,7 @@ def logout(
 def term(
     ctx: typer.Context,
 ) -> None:
-    """Run Toad TUI backed by Kimi Code CLI ACP server."""
+    """Run Toad TUI backed by Oracle CLI ACP server."""
     from .toad import run_term
 
     run_term(ctx)
@@ -794,7 +794,7 @@ def term(
 
 @cli.command()
 def acp():
-    """Run Kimi Code CLI ACP server."""
+    """Run Oracle CLI ACP server."""
     from kimi_cli.acp import acp_main
 
     acp_main()

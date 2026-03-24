@@ -456,7 +456,7 @@ async def login_kimi_code(
 
     platform = get_platform_by_id(KIMI_CODE_PLATFORM_ID)
     if platform is None:
-        yield OAuthEvent("error", "Kimi Code platform is unavailable.")
+        yield OAuthEvent("error", "Oracle platform is unavailable.")
         return
 
     auth: DeviceAuthorization

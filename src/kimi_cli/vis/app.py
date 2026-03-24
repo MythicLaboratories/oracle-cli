@@ -1,4 +1,4 @@
-"""Kimi Agent Tracing Visualizer application."""
+"""Oracle Agent Tracing Visualizer application."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ MAX_PORT_ATTEMPTS = 10
 def create_app() -> FastAPI:
     """Create the FastAPI application for the tracing visualizer."""
     application = FastAPI(
-        title="Kimi Agent Tracing Visualizer",
+        title="Oracle Agent Tracing Visualizer",
         docs_url=None,
         separate_input_output_schemas=False,
     )

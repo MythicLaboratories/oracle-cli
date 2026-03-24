@@ -98,7 +98,7 @@ def help(app: Shell, args: str):
     renderables.append(
         BulletColumns(
             Text(
-                "Sure, Kimi is ready to help! "
+                "Sure, Oracle is ready to help! "
                 "Just send me messages and I will help you get things done!"
             ),
         )
@@ -139,7 +139,7 @@ def version(app: Shell, args: str):
     """Show version information"""
     from kimi_cli.constant import VERSION
 
-    console.print(f"kimi, version {VERSION}")
+    console.print(f"oracle-cli, version {VERSION}")
 
 
 @registry.command
@@ -395,7 +395,7 @@ def changelog(app: Shell, args: str):
 @registry.command
 @shell_mode_registry.command
 def feedback(app: Shell, args: str):
-    """Submit feedback to make Kimi Code CLI better"""
+    """Submit feedback to make Oracle CLI better"""
     import webbrowser
 
     ISSUE_URL = "https://github.com/MoonshotAI/kimi-cli/issues"
@@ -494,7 +494,7 @@ async def task(app: Shell, args: str):
 
 @registry.command
 def web(app: Shell, args: str):
-    """Open Kimi Code Web UI in browser"""
+    """Open Oracle Web UI in browser"""
     soul = ensure_kimi_soul(app)
     session_id = soul.runtime.session.id if soul else None
     raise SwitchToWeb(session_id=session_id)

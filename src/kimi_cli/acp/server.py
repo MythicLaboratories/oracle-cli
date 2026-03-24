@@ -82,7 +82,7 @@ class ACPServer:
                     "terminal-auth": {
                         "command": command,
                         "args": terminal_args,
-                        "label": "Kimi Code Login",
+                        "label": "Oracle CLI Login",
                         "env": {},
                         "type": "terminal",
                     }

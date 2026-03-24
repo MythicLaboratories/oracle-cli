@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ChatStatus } from "ai";
 import { PromptInputProvider } from "@ai-elements";
 import { toast } from "sonner";
-import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { PanelLeftOpen, PanelLeftClose, Puzzle } from "lucide-react";
+import { IntegrationsDialog } from "./features/integrations";
 import { cn } from "./lib/utils";
 import { ResizablePanel, ResizablePanelGroup } from "./components/ui/resizable";
 import { ChatWorkspaceContainer } from "./features/chat/chat-workspace-container";
@@ -111,6 +112,7 @@ function App() {
 
   // Create session dialog state (lifted to App for unified access)
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showIntegrations, setShowIntegrations] = useState(false);
 
   // Auto-open create dialog or create session directly from URL params
   useEffect(() => {
@@ -476,6 +478,15 @@ function App() {
                   <div className="mt-auto flex items-center justify-between pl-2 pb-2 pr-2">
                     <div className="flex items-center gap-2">
                       <ThemeToggle />
+                      <button
+                        type="button"
+                        aria-label="Integrations"
+                        title="Integrations"
+                        className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary/50 hover:text-foreground"
+                        onClick={() => setShowIntegrations(true)}
+                      >
+                        <Puzzle className="size-4" />
+                      </button>
                     </div>
                     <button
                       type="button"
@@ -501,6 +512,12 @@ function App() {
           )}
         </div>
       </div>
+
+      {/* Integrations Dialog */}
+      <IntegrationsDialog
+        open={showIntegrations}
+        onOpenChange={setShowIntegrations}
+      />
 
       {/* Toast notifications */}
       <Toaster position="top-right" richColors />

@@ -88,8 +88,8 @@ async def _setup_platform(platform: Platform) -> _SetupResult | None:
         console.print(f"[red]Failed to get models: {e.message}[/red]")
         if e.status == 401 and platform.id != KIMI_CODE_PLATFORM_ID:
             console.print(
-                "[yellow]Hint: If your API key was obtained from Kimi Code, "
-                'please select "Kimi Code" instead.[/yellow]'
+                "[yellow]Hint: If your API key was obtained from Oracle CLI, "
+                'please select "Oracle CLI" instead.[/yellow]'
             )
         return None
     except Exception as e:

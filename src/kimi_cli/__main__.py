@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def _prog_name() -> str:
-    return Path(sys.argv[0]).name or "kimi"
+    return Path(sys.argv[0]).name or "oracle"
 
 
 def main(argv: Sequence[str] | None = None) -> int | str | None:
@@ -15,7 +15,7 @@ def main(argv: Sequence[str] | None = None) -> int | str | None:
     if len(args) == 1 and args[0] in {"--version", "-V"}:
         from kimi_cli.constant import get_version
 
-        print(f"kimi, version {get_version()}")
+        print(f"oracle-cli, version {get_version()}")
         return 0
 
     from kimi_cli.cli import cli

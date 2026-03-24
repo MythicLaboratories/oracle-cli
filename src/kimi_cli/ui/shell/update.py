@@ -174,8 +174,8 @@ async def _do_update(*, print: bool, check_only: bool) -> UpdateResult:
                         binary_path = os.path.join(root, "kimi")
                         break
                 if not binary_path:
-                    logger.error("Binary 'kimi' not found in archive.")
-                    _print("[red]Binary 'kimi' not found in archive.[/red]")
+                    logger.error("Binary 'oracle' not found in archive.")
+                    _print("[red]Binary 'oracle' not found in archive.[/red]")
                     return UpdateResult.FAILED
             except Exception:
                 logger.exception("Failed to extract archive:")
@@ -199,7 +199,7 @@ async def _do_update(*, print: bool, check_only: bool) -> UpdateResult:
                 return UpdateResult.FAILED
 
     _print("[green]Updated successfully![/green]")
-    _print("[yellow]Restart Kimi Code CLI to use the new version.[/yellow]")
+    _print("[yellow]Restart Oracle CLI to use the new version.[/yellow]")
     return UpdateResult.UPDATED
 
 

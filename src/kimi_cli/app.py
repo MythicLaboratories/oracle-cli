@@ -373,9 +373,9 @@ class KimiCLI:
             WelcomeInfoItem(
                 name="\nTip",
                 value=(
-                    "Kimi Code Web UI, a GUI version of Kimi Code, is now in technical preview."
+                    "Oracle Web UI, a GUI version of Oracle CLI, is now in technical preview."
                     "\n"
-                    "     Type /web to switch, or next time run `kimi web` directly."
+                    "     Type /web to switch, or next time run `oracle web` directly."
                 ),
                 level=WelcomeInfoItem.Level.INFO,
             )
