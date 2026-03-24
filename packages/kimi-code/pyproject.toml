@@ -1,13 +1,13 @@
 [project]
 name = "kimi-code"
-version = "1.24.0"
-description = "Kimi Code is a CLI agent that lives in your terminal."
+version = "1.25.0"
+description = "Oracle CLI — AI agent for the terminal."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["kimi-cli==1.24.0"]
+dependencies = ["oracle-cli==1.25.0"]
 
 [project.scripts]
-kimi-code = "kimi_cli.__main__:main"
+oracle-code = "kimi_cli.__main__:main"
 
 [build-system]
 requires = ["uv_build>=0.8.5,<0.10.0"]

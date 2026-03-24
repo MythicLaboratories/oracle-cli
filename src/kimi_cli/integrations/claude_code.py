@@ -166,8 +166,8 @@ class ClaudeCodeIntegration(Integration):
 
         try:
             proc = await asyncio.create_subprocess_exec(
-                path, "--print", "--output-format", "stream-json",
-                "-p", full_prompt,
+                path, "-p", full_prompt,
+                "--output-format", "json",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
                 cwd=self._work_dir,
@@ -180,7 +180,7 @@ class ClaudeCodeIntegration(Integration):
                 timeout=300,  # 5 minute timeout
             )
 
-            response_text = self._parse_stream_json(stdout_data.decode())
+            response_text = self._parse_response(stdout_data.decode())
 
             # Record the response
             self.add_context(IntegrationMessage(
@@ -204,33 +204,28 @@ class ClaudeCodeIntegration(Integration):
             logger.error(f"Claude Code send error: {e}")
             raise
 
-    def _parse_stream_json(self, raw: str) -> str:
-        """Parse stream-json output from Claude Code into text."""
-        parts: list[str] = []
-        for line in raw.strip().splitlines():
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                event = json.loads(line)
-                # Claude Code stream-json events
-                if event.get("type") == "assistant":
-                    msg = event.get("message", {})
-                    for block in msg.get("content", []):
-                        if block.get("type") == "text":
-                            parts.append(block["text"])
-                elif event.get("type") == "content_block_delta":
-                    delta = event.get("delta", {})
-                    if delta.get("type") == "text_delta":
-                        parts.append(delta["text"])
-                elif event.get("type") == "result":
-                    result_text = event.get("result", "")
-                    if result_text and not parts:
-                        parts.append(result_text)
-            except json.JSONDecodeError:
-                # Plain text fallback
-                parts.append(line)
-        return "".join(parts) or raw.strip()
+    def _parse_response(self, raw: str) -> str:
+        """Parse Claude Code JSON output into text.
+
+        Claude Code --output-format json returns a single JSON object with:
+        {"type": "result", "result": "the response text", ...}
+        """
+        raw = raw.strip()
+        if not raw:
+            return ""
+        try:
+            data = json.loads(raw)
+            if isinstance(data, dict):
+                # JSON mode: {"type": "result", "result": "..."}
+                if "result" in data:
+                    return str(data["result"])
+                # Fallback for other shapes
+                if "content" in data:
+                    return str(data["content"])
+            return raw
+        except json.JSONDecodeError:
+            # Plain text output
+            return raw
 
     async def _read_output(self) -> None:
         """Background task to read Claude Code's stdout stream."""
