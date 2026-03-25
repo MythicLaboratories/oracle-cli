@@ -1,6 +1,6 @@
 [project]
 name = "oracle-cli"
-version = "1.25.7"
+version = "1.26.0"
 description = "Oracle CLI — AI agent for the terminal, powered by Mythic Oracle"
 readme = "README.md"
 requires-python = ">=3.12"
